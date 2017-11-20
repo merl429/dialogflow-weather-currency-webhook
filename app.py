@@ -151,9 +151,10 @@ def combineForexData(usdData,eurData,gbpData):
 def getCurrency(forex,amount,fromCurrency,toCurrency):
     speech = "One or both currencies not supported"
     key = fromCurrency+"-"+toCurrency
+    locale.setlocale(locale.LC_NUMERIC, 'English')
     if key in forex:
         factor = forex.get(key)
-        converted = str(float(factor) * amount)
+        converted = str(locale.format('%.2f', float(factor) * amount, True))
         speech = str(amount) + fromCurrency + " = " + converted + toCurrency
     else:
         key1 = "USD-"+fromCurrency
@@ -161,7 +162,7 @@ def getCurrency(forex,amount,fromCurrency,toCurrency):
         if key1 in forex and key2 in forex:
             factor1 = forex.get(key1)
             factor2 = forex.get(key2)
-            converted = str(amount / float(factor1) * float(factor2))
+            converted = str(locale.format('%.2f', amount / float(factor1) * float(factor2), True))
             speech = str(amount) + fromCurrency + " = " + converted + toCurrency
     return {
         "speech": speech,
