@@ -172,7 +172,8 @@ def getCurrency(forex,amount,fromCurrency,toCurrency):
     speech = "Testing currency: " + str(amount) + " " + fromCurrency + " " + toCurrency
     try:
         key = fromCurrency+"-"+toCurrency
-        speech = forex.get(key)
+        factor = forex.get(key)
+        speech = str(float(factor) * amount)
     except:
         speech = "error"
     return {
