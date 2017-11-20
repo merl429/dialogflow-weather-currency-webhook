@@ -154,7 +154,7 @@ def getCurrency(forex,amount,fromCurrency,toCurrency):
     if key in forex:
         factor = forex.get(key)
         converted = str(float(factor) * amount)
-        speech = str(amount) + fromCurrency + " to " + toCurrency + " is " + converted
+        speech = str(amount) + fromCurrency + " = " + converted + toCurrency
     else:
         key1 = "USD-"+fromCurrency
         key2 = "USD-"+toCurrency
@@ -162,7 +162,7 @@ def getCurrency(forex,amount,fromCurrency,toCurrency):
             factor1 = forex.get(key1)
             factor2 = forex.get(key2)
             converted = str(amount / float(factor1) * float(factor2))
-            speech = str(amount) + fromCurrency + " to " + toCurrency + " is " + converted
+            speech = str(amount) + fromCurrency + " = " + converted + toCurrency
     return {
         "speech": speech,
         "displayText": speech,
