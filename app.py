@@ -79,26 +79,6 @@ def processRequest(req):
         return res
     else:
         return {}
-    
-def testForex(usdData):
-    speech = "Testing forex"
-    try:
-        for x in usdData['feed']['entry']:
-            key = 'USD-'+x['title']['$t']
-            factorData = x['content']['$t']
-            factorA,factorB = factorData.split(" ")
-            speech = key
-            break
-    except:
-        speech = "error"
-    return {
-        "speech": speech,
-        "displayText": speech,
-        "data": {},
-        "contextOut": [],
-        "source": "Google Forex"
-    }
-
 
 def makeYqlQuery(req):
     result = req.get("result")
@@ -169,13 +149,20 @@ def combineForexData(usdData,eurData,gbpData):
     return forex
     
 def getCurrency(forex,amount,fromCurrency,toCurrency):
-    speech = "Testing currency: " + str(amount) + " " + fromCurrency + " " + toCurrency
-    try:
-        key = fromCurrency+"-"+toCurrency
+    speech = "One or both currencies not supported"
+    key = fromCurrency+"-"+toCurrency
+    if key in forex:
         factor = forex.get(key)
-        speech = str(float(factor) * amount)
-    except:
-        speech = "error"
+        converted = str(float(factor) * amount)
+        speech = str(amount) + fromCurrency + " to " + toCurrency + " is " + converted
+    else:
+        key1 = "USD-"+fromCurrency
+        key2 = "USD-"+toCurrency
+        if key1 in forex and key2 in forex:
+            factor1 = forex.get(key1)
+            factor2 = forex.get(key2)
+            converted = str(amount / float(factor1) * float(factor2))
+            speech = str(amount) + fromCurrency + " to " + toCurrency + " is " + converted
     return {
         "speech": speech,
         "displayText": speech,
